@@ -5,10 +5,12 @@ const { db, User, Task } = require('./database/setup');
 require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+const cors = require('cors');
+app.use(cors());
 
 // JWT Authentication Middleware
 function requireAuth(req, res, next) {
@@ -79,6 +81,16 @@ app.get('/', (req, res) => {
             updateTask: 'PUT /api/tasks/:id (requires auth)',
             deleteTask: 'DELETE /api/tasks/:id (requires auth)'
         }
+    });
+});
+//Auto Deploy
+app.get('/api/info', (req, res) => {
+    res.json({
+        message: 'Auto-deploy is working!',
+        status: 'success',
+        version: '1.0.1',
+        deployed: true,
+        timestamp: new Date().toISOString()
     });
 });
 
